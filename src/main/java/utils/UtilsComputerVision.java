@@ -50,8 +50,13 @@ public class UtilsComputerVision {
 	protected static String screenshotFolder;
 
 	static {
-		nu.pattern.OpenCV.loadShared();
-		nu.pattern.OpenCV.loadLocally();
+//		nu.pattern.OpenCV.loadShared();
+//		nu.pattern.OpenCV.loadLocally();
+		try {
+			System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -115,6 +120,8 @@ public class UtilsComputerVision {
 		int scale = 5;
 		getScaledSubImage(d, img, element, visualLocator, scale);
 
+		//check if the Image has more than one same subImages
+		//Ryan 2018-11-26
 		while (!isUnique(destFile.getAbsolutePath(), visualLocator.getAbsolutePath())) {
 			scale--;
 			if (scale == 0) {
@@ -213,6 +220,7 @@ public class UtilsComputerVision {
 
 		/* Show me what you got. */
 		Core.rectangle(img, matchLoc, new Point(matchLoc.x + templ.cols(), matchLoc.y + templ.rows()), new Scalar(0, 255, 0), 2);
+//		Imgproc.rectangle(img, matchLoc, new Point(matchLoc.x + templ.cols(), matchLoc.y + templ.rows()), new Scalar(0, 255, 0), 2);
 
 		/* Save the visualized detection. */
 		File annotated = new File(outFile);
@@ -255,8 +263,9 @@ public class UtilsComputerVision {
 		int min_offset_y = Math.min(element.getLocation().y, img.getHeight() - rect.height - element.getLocation().y);
 		int offset = Math.min(min_offset_x, min_offset_y);
 
-		// System.out.println("min_offset_x: " + min_offset_x);
-		// System.out.println("min_offset_y: " + min_offset_y);
+//		 System.out.println("min_offset_x: " + min_offset_x);
+//		 System.out.println("element location: " + element.getLocation().x);
+//		 System.out.println("min_offset_y: " + min_offset_y);
 		// System.out.println("offset: " + offset);
 		offset = offset / scale;
 		// System.out.println("offset scaled: " + offset);
@@ -359,7 +368,7 @@ public class UtilsComputerVision {
 	}
 
 	public static boolean isUnique(String inFile, String templateFile) {
-
+  
 		Mat img = Highgui.imread(inFile);
 		Mat templ = Highgui.imread(templateFile);
 
@@ -389,7 +398,6 @@ public class UtilsComputerVision {
 			return false;
 		} else
 			return true;
-
 	}
 
 	public static void resizeScreenshot(String path, double scale) throws IOException {
@@ -603,12 +611,12 @@ public class UtilsComputerVision {
 	// public static List<Point> returnAllMatches(String inFile, String
 	// templateFile) {
 	//
-	// Mat img = Highgui.imread(inFile);
-	// Mat templ = Highgui.imread(templateFile);
+	// Mat img = Imgcodecs.imread(inFile);
+	// Mat templ = Imgcodecs.imread(templateFile);
 	//
 	// File visuallocator = new File("visuallocator.png");
-	// Highgui.imwrite(visuallocator.getPath(), templ);
-	// templ = Highgui.imread(visuallocator.getPath());
+	// Imgcodecs.imwrite(visuallocator.getPath(), templ);
+	// templ = Imgcodecs.imread(visuallocator.getPath());
 	//
 	// // / Create the result matrix
 	// int result_cols = img.cols() - templ.cols() + 1;
@@ -661,7 +669,7 @@ public class UtilsComputerVision {
 	//
 	// /* Save the visualized detection. */
 	// File annotated = new File("annotated.png");
-	// Highgui.imwrite(annotated.getPath(), img);
+	// Imgcodecs.imwrite(annotated.getPath(), img);
 	//
 	// return matches;
 	// }
@@ -693,8 +701,16 @@ public class UtilsComputerVision {
 		}
 
 		/* Save output. */
-		String filename = "output/templateMatching/shiTomasi.png";
-		Highgui.imwrite(filename, img);
+		File dir = new File("output\\templateMatching");
+		if(!dir.exists()) {
+			if(!dir.mkdir()) {
+				System.out.println("make directory failed!");
+			}
+		}
+		String filename = "output\\templateMatching\\shiTomasi.png";
+		if(Highgui.imwrite(filename, img)) {
+			System.out.println("write picture failed!");
+		}
 		System.out.println("Output saved in " + filename);
 
 	}
@@ -832,11 +848,11 @@ public class UtilsComputerVision {
 
 		/* output filename. */
 		String filename = inFile.toString();
-		int index = filename.lastIndexOf("/");
+		int index = filename.lastIndexOf("\\");
 		filename = filename.substring(index + 1, filename.length());
 		filename = filename.replace(".png", "");
 
-		File annotated = new File("output/templateMatching/CANNY-IMAGE-" + filename + ".png");
+		File annotated = new File("output\\templateMatching\\CANNY-IMAGE-" + filename + ".png");
 		Highgui.imwrite(annotated.getPath(), img);
 
 		img = Highgui.imread(annotated.getPath());
@@ -853,11 +869,11 @@ public class UtilsComputerVision {
 
 		/* output filename. */
 		filename = templateFile.toString();
-		index = filename.lastIndexOf("/");
+		index = filename.lastIndexOf("\\");
 		filename = filename.substring(index + 1, filename.length());
 		filename = filename.replace(".png", "");
 
-		File visuallocator = new File("output/templateMatching/CANNY-TEMPLATE-" + filename + ".png");
+		File visuallocator = new File("output\\templateMatching\\CANNY-TEMPLATE-" + filename + ".png");
 		Highgui.imwrite(visuallocator.getPath(), templ);
 
 		templ = Highgui.imread(visuallocator.getPath());
@@ -903,12 +919,12 @@ public class UtilsComputerVision {
 
 		/* output filename. */
 		filename = inFile.toString();
-		index = filename.lastIndexOf("/");
+		index = filename.lastIndexOf("\\");
 		filename = filename.substring(index + 1, filename.length());
 		filename = filename.replace(".png", "");
 
 		/* Save the visualized detection. */
-		annotated = new File("output/templateMatching/CANNY-TM-" + filename + ".png");
+		annotated = new File("output\\templateMatching\\CANNY-TM-" + filename + ".png");
 		Highgui.imwrite(annotated.getPath(), img);
 
 		return bestMatches;

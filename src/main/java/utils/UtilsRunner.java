@@ -51,6 +51,8 @@ public class UtilsRunner {
 			/* for each breakage, save the exception on the filesystem. */
 			for (Failure fail : result.getFailures()) {
 
+				System.out.println(fail);
+				
 				EnhancedException ea = UtilsRepair.saveExceptionFromFailure(fail);
 
 				String path = Settings.testingTestSuiteVisualTraceExecutionFolder + UtilsRepair.capitalizeFirstLetter(ea.getFailedTest()) + Settings.JAVA_EXT;

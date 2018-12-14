@@ -2,3 +2,8 @@ crawloutput.txt
 currentScreenshot.png
 target
 output
+.settings
+.project
+.classpath
+crawl
+crawljax.log

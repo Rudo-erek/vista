@@ -32,7 +32,14 @@ public class UtilsTemplateMatching {
 
 	/* OpenCV bindings. */
 	static {
-		nu.pattern.OpenCV.loadShared();
+//		System.load("C:\\Users\\Administrator\\Downloads\\opencv\\build\\java\\x64\\opencv_java343.dll");
+//		System.load(Core.NATIVE_LIBRARY_NAME);
+//		nu.pattern.OpenCV.loadShared();
+		try {
+			System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 	}
 
 	/* The threshold ratio used for the distance. */
@@ -189,12 +196,12 @@ public class UtilsTemplateMatching {
 
 			/* output filename. */
 			String filename = object.toString();
-			int i = filename.lastIndexOf("/");
+			int i = filename.lastIndexOf("\\");
 			filename = filename.substring(i + 1, filename.length());
 			filename = filename.replace(".png", "");
 
 			/* visualize detected features. */
-			Highgui.imwrite("output/templateMatching/FAST-" + filename + "-outputImage.jpg", outputImage);
+			Highgui.imwrite("output\\templateMatching\\FAST-" + filename + "-outputImage.jpg", outputImage);
 
 			/* Get the rectangle the the potential match is. */
 			try {
@@ -224,8 +231,8 @@ public class UtilsTemplateMatching {
 				Features2d.drawMatches(objectImage, objectKeyPoints, sceneImage, sceneKeyPoints, goodMatches, matchoutput, matchestColor, newKeypointColor, new MatOfByte(), 2);
 
 				/* visualize feature detection. */
-				Highgui.imwrite("output/templateMatching/FAST-" + filename + "-matchoutput.jpg", matchoutput);
-				Highgui.imwrite("output/templateMatching/FAST-" + filename + "-img.jpg", img);
+				Highgui.imwrite("output\\templateMatching\\FAST-" + filename + "-matchoutput.jpg", matchoutput);
+				Highgui.imwrite("output\\templateMatching\\FAST-" + filename + "-img.jpg", img);
 			} catch (Exception e) {
 				System.out.println("Homography not found");
 			}
@@ -333,13 +340,25 @@ public class UtilsTemplateMatching {
 			scnMatOfPoint2f.fromList(scenePoints);
 
 			/* output filename. */
+			// ------
+			// change "/" to "\\"
+			// Ryan 2018-12-04 
+			// ------
 			String filename = object.toString();
-			int index = filename.lastIndexOf("/");
+			int index = filename.lastIndexOf("\\");
 			filename = filename.substring(index + 1, filename.length());
 			filename = filename.replace(".png", "");
 
 			/* visualize detected features. */
-			Highgui.imwrite("output/templateMatching/SIFT-" + filename + "-outputImage.jpg", outputImage);
+			File dir = new File("output\\templateMatching");
+			if(!dir.exists()) {
+				if(!dir.mkdir()) {
+					System.out.println("make directory failed!");
+				}
+			}
+			if(!Highgui.imwrite("output\\templateMatching\\SIFT-" + filename + "-outputImage.jpg", outputImage)) {
+				System.out.println("write picture failed!");
+			}
 
 			try {
 
@@ -370,12 +389,12 @@ public class UtilsTemplateMatching {
 				Features2d.drawMatches(objectImage, objectKeyPoints, sceneImage, sceneKeyPoints, goodMatches, matchoutput, matchestColor, newKeypointColor, new MatOfByte(), 2);
 
 				filename = object.toString();
-				index = filename.lastIndexOf("/");
+				index = filename.lastIndexOf("\\");
 				filename = filename.substring(index + 1, filename.length());
 				filename = filename.replace(".png", "");
 
-				Highgui.imwrite("output/templateMatching/SIFT-" + filename + "-matchoutput.jpg", matchoutput);
-				Highgui.imwrite("output/templateMatching/SIFT-" + filename + "-img.jpg", img);
+				Highgui.imwrite("output\\templateMatching\\SIFT-" + filename + "-matchoutput.jpg", matchoutput);
+				Highgui.imwrite("output\\templateMatching\\SIFT-" + filename + "-img.jpg", img);
 
 			} catch (Exception e) {
 				System.out.println("[LOG]\tHomography not found");
@@ -471,11 +490,15 @@ public class UtilsTemplateMatching {
 		}
 
 		/* Save the visualized detection. */
+		// ------
+		// change "/" to "\\"
+		// Ryan 2018-12-04
+		// ------
 		String filename = imageFile.toString();
-		int i = filename.lastIndexOf("/");
+		int i = filename.lastIndexOf("\\");
 		filename = filename.substring(i + 1, filename.length());
 		filename = filename.replace(".png", "");
-		File annotated = new File("output/templateMatching/TM-normalized-" + statement.getLine() + ".png");
+		File annotated = new File("output\\templateMatching\\TM-normalized-" + statement.getLine() + ".png");
 		Highgui.imwrite(annotated.getPath(), img);
 
 		/* Return the center. */
@@ -501,10 +524,10 @@ public class UtilsTemplateMatching {
 		Mat img = Highgui.imread(imageFile);
 		Mat templ = Highgui.imread(templateFile);
 
-		File t = new File("output/templateMatching/TM-template.png");
+		File t = new File("output\\templateMatching\\TM-template.png");
 		Highgui.imwrite(t.getPath(), templ);
 
-		File o = new File("output/templateMatching/TM-imageoriginal.png");
+		File o = new File("output\\templateMatching\\TM-imageoriginal.png");
 		Highgui.imwrite(o.getPath(), img);
 
 		/* Create the result matrix. */
@@ -516,7 +539,7 @@ public class UtilsTemplateMatching {
 		Imgproc.matchTemplate(img, templ, result, Imgproc.TM_CCOEFF_NORMED);
 		Core.normalize(result, result, 0, 1, Core.NORM_MINMAX, -1, new Mat());
 
-		File risultato = new File("output/templateMatching/TM-result-normalized.png");
+		File risultato = new File("output\\templateMatching\\TM-result-normalized.png");
 		Highgui.imwrite(risultato.getPath(), result);
 
 		List<Point> matches = new LinkedList<Point>();
@@ -555,10 +578,10 @@ public class UtilsTemplateMatching {
 
 		/* Save the visualized detection. */
 		String filename = imageFile.toString();
-		int i = filename.lastIndexOf("/");
+		int i = filename.lastIndexOf("\\");
 		filename = filename.substring(i + 1, filename.length());
 		filename = filename.replace(".png", "");
-		File annotated = new File("output/templateMatching/TM-normalized-" + filename + ".png");
+		File annotated = new File("output\\templateMatching\\TM-normalized-" + filename + ".png");
 		Highgui.imwrite(annotated.getPath(), img);
 
 		/* Return all centers. */

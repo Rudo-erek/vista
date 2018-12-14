@@ -1,10 +1,13 @@
 package utils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import org.apache.commons.io.FileUtils;
 import org.aspectj.lang.JoinPoint;
+import org.jboss.netty.handler.timeout.TimeoutException;
 import org.openqa.selenium.WebDriver;
 
 import config.Settings;
@@ -53,7 +56,7 @@ public class UtilsAspect {
 			if (Settings.VERBOSE)
 				System.out.print("[LOG]\tcreating directory " + path + "...");
 
-			boolean result = theDir.mkdir();
+			boolean result = theDir.mkdirs();
 			if (result) {
 				if (Settings.VERBOSE)
 					System.out.println("done");
@@ -96,12 +99,21 @@ public class UtilsAspect {
 
 		/* wget to save html page. */
 		Runtime runtime = Runtime.getRuntime();
-		Process p = runtime.exec("/usr/local/bin/wget -p -k -E -nd -P " + path + " " + urlString);
+		Process p = runtime.exec("E:/learn/vista/Ryan Addition/wget-1.19.4-win64/wget -p -k -E -nd -P " + path + " " + urlString);
+		
+		// handler the pitfall of runtime.exec()
+		// Ryan 2018-11-27 reference: https://www.javaworld.com/article/2071275/core-java/when-runtime-exec---won-t.html?page=2
+		StreamGobbler errorGobbler = new StreamGobbler(p.getErrorStream(), "ERR");
+		StreamGobbler outputGobbler = new StreamGobbler(p.getInputStream(), "OUT");
+		errorGobbler.start();
+		outputGobbler.start();
 
 		try {
 			p.waitFor();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		} finally {
+			p.destroy();
 		}
 
 		return savedHTML;

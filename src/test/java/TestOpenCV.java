@@ -7,6 +7,7 @@ import java.util.Comparator;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
@@ -17,8 +18,9 @@ public class TestOpenCV {
 
 	@Before
 	public void setUp() throws Exception {
-		nu.pattern.OpenCV.loadShared();
-		nu.pattern.OpenCV.loadLocally();
+		System.load(Core.NATIVE_LIBRARY_NAME);
+//		nu.pattern.OpenCV.loadShared();
+//		nu.pattern.OpenCV.loadLocally();
 	}
 
 	@Test

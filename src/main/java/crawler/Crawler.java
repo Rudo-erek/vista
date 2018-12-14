@@ -40,7 +40,7 @@ public class Crawler {
 		this.testBroken = testBroken;
 		this.testCorrect = testCorrect;
 		this.brokenStep = brokenStep;
-		this.repairedTest = repairedTest;
+		this.repairedTest = (HashMap<Integer, Statement>) appliedRepairs;
 		Settings.aspectActive = false;
 		this.repairStrategy = repairStrategy;
 	}

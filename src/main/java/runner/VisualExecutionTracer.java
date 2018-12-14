@@ -1,6 +1,9 @@
 package runner;
 
 import java.io.IOException;
+import java.util.Set;
+
+import org.reflections.*;
 
 import config.Settings;
 import utils.UtilsRunner;
@@ -21,7 +24,14 @@ public class VisualExecutionTracer {
 		Settings.aspectActive = true;
 
 		/* Claroline example. */
-		UtilsRunner.runTest(Settings.testSuiteCorrect, "TestLoginAdmin");
+		/* Run all testcases in the testsuite */
+//		Reflections reflections = new Reflections("src.addressbook");
+//		Set<Class<? extends Object>> allClasses = reflections.getSubTypesOf(Object.class);
+//		for(Class<? extends Object> c: allClasses) {
+//			System.out.println(c);
+//		}
+		
+		UtilsRunner.runTest(Settings.testSuiteCorrect, "TextElementDelete");
 
 	}
 

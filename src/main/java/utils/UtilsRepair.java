@@ -213,15 +213,19 @@ public class UtilsRepair {
 	 */
 	public static void saveTest(String prefix, String className, RepairMode repairStrategy, EnhancedTestCase temp) {
 
-		String oldPath = Settings.resourcesFolder + prefix.replace(".", "/") + className + Settings.JAVA_EXT;
+		// ------
+		// change "/" to "\\"
+		// 2018-12-04
+		// ------
+		String oldPath = Settings.resourcesFolder + prefix.replace(".", "\\") + className + Settings.JAVA_EXT;
 		String newPath = "";
 
 		if (repairStrategy == RepairMode.DOM) {
-			newPath = Settings.resourcesFolder + prefix.replace(".", "RepairedDOM/") + className + Settings.JAVA_EXT;
+			newPath = Settings.resourcesFolder + prefix.replace(".", "RepairedDOM\\") + className + Settings.JAVA_EXT;
 		} else if (repairStrategy == RepairMode.VISUAL) {
-			newPath = Settings.resourcesFolder + prefix.replace(".", "RepairedVisual/") + className + Settings.JAVA_EXT;
+			newPath = Settings.resourcesFolder + prefix.replace(".", "RepairedVisual\\") + className + Settings.JAVA_EXT;
 		} else if (repairStrategy == RepairMode.HYBRID) {
-			newPath = Settings.resourcesFolder + prefix.replace(".", "RepairedHybrid/") + className + Settings.JAVA_EXT;
+			newPath = Settings.resourcesFolder + prefix.replace(".", "RepairedHybrid\\") + className + Settings.JAVA_EXT;
 		}
 
 		try {

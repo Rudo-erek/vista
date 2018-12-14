@@ -92,8 +92,10 @@ public class UtilsParser {
 		if (arg.length() == 0 || arg.isEmpty() || !arg.contains(Settings.JAVA_EXT)) {
 			throw new Exception("[ERR]\tmalformed classname path");
 		}
-
-		return arg.substring(arg.lastIndexOf("/") + 1).replace(Settings.JAVA_EXT, "");
+		
+		// change "/" to "\\"
+		// Ryan 2018-11-28
+		return arg.substring(arg.lastIndexOf("\\") + 1).replace(Settings.JAVA_EXT, "");
 	}
 
 	/**
@@ -244,7 +246,10 @@ public class UtilsParser {
 		// src/clarolineDirectBreakage/DirectBreakage.java
 		// testSuite/DirectBreakage/DirectBreakage.json
 
-		int lastSlash = path.lastIndexOf("/");
+		// ------
+		// change "/" to "\\"
+		// Ryan 2018-12-03
+		int lastSlash = path.lastIndexOf("\\");
 		int end = path.indexOf(".java");
 		String testName = path.substring(lastSlash + 1, end);
 		String newPath = folder + testName + Settings.sep + testName + Settings.JSON_EXT;
@@ -420,8 +425,12 @@ public class UtilsParser {
 
 	public static String getPackageName(String newclazz) {
 		// src/main/resources/clarolineDirectBreakageRepaired/TestLoginAdminRepaired.java
-		newclazz = newclazz.replace("src/main/resources/", "");
-		newclazz = newclazz.substring(0, newclazz.indexOf("/"));
+		// ------
+		// change "/" to "\\"
+		// Ryan 2018-12-04
+		// ------
+		newclazz = newclazz.replace("src\\main\\resources\\", "");
+		newclazz = newclazz.substring(0, newclazz.indexOf("\\"));
 		return newclazz;
 	}
 

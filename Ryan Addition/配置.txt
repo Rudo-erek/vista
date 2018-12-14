@@ -1,0 +1,13 @@
+firefox 34.0
+
+OpenCV 包的变化：
+1. 在3.0以下，读写图片用 Highgui.imread / Highgui.imwrite; 
+   而在3.0以上，读写图片用Imgcodecs
+   
+2. Core.rectangle / circle 方法被 Imgproc.rectangle所代替
+
+3. 下载opencv，并在eclipse中指定引用的路径
+
+4. 下载wget，并在visualrepair/src/main/java/utils.UtilsAspect的saveHTMLPage中指定引用路径
+
+5. opencv3 不支持免费的surf，所以还是要换回 opencv2.0

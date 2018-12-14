@@ -103,6 +103,10 @@ public class VisualTestRepair {
 			etc = pt.parseAndSerialize(testBroken);
 
 			pt.setFolder(Settings.referenceTestSuiteVisualTraceExecutionFolder);
+			// ------
+			// testBroken = UtilsFileGetters.getTestFile(className, Settings.pathToTestSuiteUnderTest);
+			// Ryan 2018-12-03
+			// ------
 			testCorrect = pt.parseAndSerialize(UtilsFileGetters.getTestFile(className, Settings.pathToReferenceTestSuite));
 
 			UtilsParser.sanityCheck(etc, testCorrect);
@@ -141,8 +145,14 @@ public class VisualTestRepair {
 			try {
 
 				/* try to poll the DOM looking for the web element. */
-				webElementFromDomLocator = UtilsVisualRepair.retrieveWebElementFromDomLocator(driver, statement.getDomLocator());
-				noSuchElementException = false;
+				// ------
+				// Add check get action
+				// Ryan 2018-12-03
+				// ------
+				if (statement.getAction() != "get") {
+					webElementFromDomLocator = UtilsVisualRepair.retrieveWebElementFromDomLocator(driver, statement.getDomLocator());
+					noSuchElementException = false;
+				}
 
 			} catch (NoSuchElementException Ex) {
 
@@ -333,7 +343,17 @@ public class VisualTestRepair {
 
 			try {
 				/* after ascertaining the right element, perform the action. */
-				if (statement.getAction().equalsIgnoreCase("click")) {
+				// ------
+				// add get action
+				// Ryan 2018-12-03
+				// ------
+				if(statement.getAction().equalsIgnoreCase("get")) {
+					
+					driver.get("localhost:8080" + statement.getValue());
+					
+				} 
+				// ------
+				else if (statement.getAction().equalsIgnoreCase("click")) {
 
 					webElementFromDomLocator.click();
 

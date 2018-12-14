@@ -36,8 +36,7 @@ public class UtilsVisualRepair {
 
 		Statement statement = null;
 		WebElement webElementFromVisualLocator = null;
-
-		/*
+	/*
 		 * try to retrieve the visual locator and raises an exception if it does not
 		 * exist on the filesystem.
 		 */
@@ -79,8 +78,14 @@ public class UtilsVisualRepair {
 
 			/* I trust the element found by the visual locator. */
 			System.out.println("[LOG]\tCandidate repair element " + webElementFromVisualLocator);
+			
+			// ------
+			// Add more log information about the different locators from visual-search and dom-search.
+			// Ryan 2018-12-14
+			System.out.println("DOM locator target: " + webElementFromDomLocator.getAttribute("outerHTML"));
+			System.out.println("Visual locator target: " + webElementFromVisualLocator.getAttribute("outerHTML"));
+			// ------
 			webElementFromDomLocator = webElementFromVisualLocator;
-
 		} else {
 
 			System.out.println("[LOG]\tDOM locator and visual locator target the same element");

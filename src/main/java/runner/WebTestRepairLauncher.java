@@ -3,6 +3,7 @@ package runner;
 import java.io.IOException;
 
 import config.Settings.RepairMode;
+import utils.UtilsInsertMethod;
 
 public class WebTestRepairLauncher {
 
@@ -14,9 +15,11 @@ public class WebTestRepairLauncher {
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		
 		/* set up the test class to validate/repair. */
-		String packageName = "clarolineNew" + ".";
-		String testClassName = "TestLoginAdmin";
+		String packageName = "eshopOld" + ".";
+		String testClassName = "TextElementDelete";
 
+//		new UtilsInsertMethod().insertGetDriverMethod("eshopOld", "TextElementDelete");
+		
 		/* select the repair mode. */
 		RepairMode repairMode = RepairMode.VISUAL;
 
@@ -25,6 +28,7 @@ public class WebTestRepairLauncher {
 		
 		/* change the repair mode to DOM-based (WATER). */
 		repairMode = RepairMode.DOM;
+//		RepairMode repairMode = RepairMode.DOM;
 
 		/* re-execute test repair. */
 		runWebTestRepair(packageName, testClassName, repairMode);

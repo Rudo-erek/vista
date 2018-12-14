@@ -119,7 +119,12 @@ public class UtilsFileGetters {
 		});
 	
 		if (listOfFiles.length == 0) {
-	
+			// ------
+			// Add detailed bug information.
+			// Ryan 2018-12-11
+			System.out.printf("\tbeginLine: %d, name: %s, type: %s\n", beginLine, name, type);
+			// ------
+			
 			throw new Exception("[LOG]\tNo JSON file retrieved");
 	
 		} else if (listOfFiles.length == 1) {
